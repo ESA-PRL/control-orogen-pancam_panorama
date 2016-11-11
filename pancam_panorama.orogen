@@ -1,13 +1,13 @@
 name "pancam_panorama"
 
 import_types_from "pancam_panoramaTypes.hpp"
+import_types_from "controldev/ControlDevTypes.hpp"
+import_types_from "base"
 
 task_context "Task" do
     needs_configuration
 
-    property("enable", "bool", false).
-    	doc("Enable automatic panorama mode")
-    property("positionTilt", "double", 0.0).
+    property("positionTilt", "double", 0.5).
     	doc("PanCam tilt position for all positions")
     property("positionLeft", "double", -0.5).
     	doc("PanCam pan position left")
@@ -16,17 +16,21 @@ task_context "Task" do
     property("positionRight", "double", 0.5).
     	doc("PanCam pan position right")
 
+    # Input ports
+    input_port("raw_command", "/controldev/RawCommand").
+        doc("Input from joystick")
     input_port("pan_angle_in", "double").
         doc("Feedback from the PTU pan angle")
     input_port("tilt_angle_in", "double").
         doc("Feedback from the PTU tilt angle")
 
+    # Output ports
     output_port("pan_angle_out", "double").
         doc("PTU angle command")
     output_port("tilt_angle_out", "double").
         doc("PTU tilt command")
-        
-    port_driven("pan_angle_in", "tilt_angle_in")
+
+    port_driven("pan_angle_in", "tilt_angle_in", "raw_command")
 
     periodic 0.1
 end
