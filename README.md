@@ -17,10 +17,7 @@ Affiliation: Automatipon and Robotics Laboratories, ESTEC, ESA**
 
 ### Dependencies
 
-This package depends on the following packages:
-
-* [drivers/controldev](https://github.com/rock-drivers/drivers-controldev)
-* [drivers/orogen/controldev](https://github.com/rock-drivers/drivers-orogen-controldev)
+This package has no special dependencies.
 
 ### Building
 

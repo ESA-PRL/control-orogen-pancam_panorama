@@ -22,6 +22,7 @@ namespace pancam_panorama
         const double position_left;
         const double position_center;
         const double position_right;
+        
         // Order in which the positions are traversed
         const double * position_order[4] = {&position_center, &position_left, &position_center, &position_right};
 
