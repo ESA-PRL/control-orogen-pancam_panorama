@@ -17,7 +17,10 @@ Affiliation: Automatipon and Robotics Laboratories, ESTEC, ESA**
 
 ### Dependencies
 
-This package has no special dependencies.
+This package depends on the following packages:
+
+* [drivers/controldev](https://github.com/rock-drivers/drivers-controldev)
+* [drivers/orogen/controldev](https://github.com/rock-drivers/drivers-orogen-controldev)
 
 ### Building
 
@@ -35,6 +38,10 @@ Execute the following to build the package:
 ### motion_translator
 
 #### Inputs
+
+* **`raw_command`** (/controldev/RawCommand)
+
+Raw messages coming from a joystick or gamepad.
 
 * **`pan_angle_in`** (/double)
 
@@ -55,10 +62,6 @@ Pan motion command directed to a pan-tilt unit, for example for the [ptu_directe
 Tilt motion command directed to a pan-tilt unit, for example for the [ptu_directedperception](https://github.com/rock-drivers/drivers-orogen-ptu_directedperception) package.
 
 #### Parameters
-
-* **`enable`** (/bool)
-
-Enable the PanCam panorama automatic routine.
 
 * **`positionTilt`** (/double)
 
