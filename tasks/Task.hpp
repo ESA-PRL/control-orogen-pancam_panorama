@@ -46,6 +46,12 @@ namespace pancam_panorama
         // Order in which the positions are traversed
         int position_index;
         const double * position_order[4] = {&position_center, &position_left, &position_center, &position_right};
+        // Pointer to a const double to mark the next goal
+        const double * position_goal;
+        
+        RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> left_frame, right_frame;
+        
+        bool save_frame, left_frame_saved, right_frame_saved;
 
     public:
         Task(std::string const& name = "pancam_panorama::Task");

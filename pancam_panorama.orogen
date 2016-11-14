@@ -23,15 +23,21 @@ task_context "Task" do
         doc("Feedback from the PTU pan angle")
     input_port("tilt_angle_in", "double").
         doc("Feedback from the PTU tilt angle")
+    input_port("left_frame_in", ro_ptr('base::samples::frame::Frame')).
+        doc("Input of the left camera of the PTU")
+    input_port("right_frame_in", ro_ptr('base::samples::frame::Frame')).
+        doc("Input of the right camera of the PTU")
 
     # Output ports
     output_port("pan_angle_out", "double").
         doc("PTU angle command")
     output_port("tilt_angle_out", "double").
         doc("PTU tilt command")
+    output_port("left_frame_out", ro_ptr('base::samples::frame::Frame')).
+        doc("Output of the left camera of the PTU")
+    output_port("right_frame_out", ro_ptr('base::samples::frame::Frame')).
+        doc("Output of the right camera of the PTU")
 
-    port_driven("pan_angle_in", "tilt_angle_in", "raw_command")
-
-    periodic 0.1
+    port_driven
 end
 
