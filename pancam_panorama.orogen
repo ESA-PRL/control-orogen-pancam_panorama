@@ -16,13 +16,13 @@ task_context "Task" do
     property("positionRight", "double", 0.5).
     	doc("PanCam pan position right")
     property("positionErrorMargin", "double", 0.01).
-    	doc("PanCam pan position error margin")
+    	doc("PanCam pan and tilt position error margin")
     property("frameDelayTimeMs", "int", 100).
     	doc("Minimum delay in milliseconds before saving a frame after the PanCam reaches its goal position")
 
     # Input ports
     input_port("raw_command", "/controldev/RawCommand").
-        doc("Input from joystick")
+        doc("Input from joystick to toggle the panorama mode")
     input_port("pan_angle_in", "double").
         doc("Feedback from the PTU pan angle")
     input_port("tilt_angle_in", "double").

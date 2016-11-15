@@ -41,7 +41,7 @@ Execute the following to build the package:
 
 * **`raw_command`** (/controldev/RawCommand)
 
-Raw messages coming from a joystick or gamepad.
+Raw messages coming from a joystick or gamepad, used to toggle the panorama mode.
 
 * **`pan_angle_in`** (/double)
 
@@ -50,6 +50,14 @@ Feedback from the PTU pan angle, for example for the [ptu_directedperception](ht
 * **`tilt_angle_in`** (/double)
 
 Feedback from the PTU tilt angle, for example for the [ptu_directedperception](https://github.com/rock-drivers/drivers-orogen-ptu_directedperception) package.
+
+* **`left_frame_in`** (base::samples::frame::Frame)
+
+Input of the left camera of the PTU.
+
+* **`right_frame_in`** (base::samples::frame::Frame)
+
+Input of the right camera of the PTU.
 
 #### Outputs
 
@@ -60,6 +68,14 @@ Pan motion command directed to a pan-tilt unit, for example for the [ptu_directe
 * **`tilt_angle_out`** (/double)
 
 Tilt motion command directed to a pan-tilt unit, for example for the [ptu_directedperception](https://github.com/rock-drivers/drivers-orogen-ptu_directedperception) package.
+
+* **`left_frame_out`** (base::samples::frame::Frame)
+
+Output of the left camera of the PTU.
+
+* **`right_frame_out`** (base::samples::frame::Frame)
+
+Output of the right camera of the PTU.
 
 #### Parameters
 
@@ -78,4 +94,12 @@ PanCam pan position center. Arbitrary units.
 * **`positionRight`** (/double)
 
 PanCam pan position right. Arbitrary units.
+
+* **`positionErrorMargin`** (/double)
+
+PanCam pan position error margin. Arbitrary units.
+
+* **`frameDelayTimeMs`** (/double)
+
+Minimum delay in milliseconds before saving a frame after the PanCam reaches its goal position.
 
