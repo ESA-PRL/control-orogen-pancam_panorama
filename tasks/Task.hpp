@@ -36,21 +36,26 @@ namespace pancam_panorama
         double pan_angle_in;
         double tilt_angle_in;
         
-        // Tilt angle at which the PanCam should be when taking pictures
-        const double tilt_angle;
+        // Position error margin for the pan and tilt positions
+        double position_error_margin;
         
-        const double position_left;
-        const double position_center;
-        const double position_right;
+        // Tilt angle at which the PanCam should be when taking pictures
+        double tilt_angle;
+        
+        double position_left;
+        double position_center;
+        double position_right;
         
         // Order in which the positions are traversed
         int position_index;
-        const double * position_order[4] = {&position_center, &position_left, &position_center, &position_right};
-        // Pointer to a const double to mark the next goal
-        const double * position_goal;
+        double * position_order[4] = {&position_center, &position_left, &position_center, &position_right};
+        // Pointer to a double to mark the next goal
+        double * position_goal;
         
+        base::Time goal_arrival_time;
         RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> left_frame, right_frame;
         
+        base::Time frame_delay_um;
         bool save_frame, left_frame_saved, right_frame_saved;
 
     public:
