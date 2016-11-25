@@ -1,12 +1,13 @@
 <package>
   <description brief="PanCam panorama">
-  Component that automatically takes pictures with the PanCam in 3 different positions.
+  Component that automatically takes pictures with the PanCam in 3 different positions and outputs the frames and angles of the pan-tilt unit (PTU).
   </description>
   <author>Karl Kangur/karl.kangur@esa.int</author>
   <license></license>
   <url>https://github.com/hdpr-rover/control-orogen-pancam_panorama</url>
   <logo>http://</logo>
   <depend package="base/cmake" />
+  <depend package="base/types" />
   <depend package="drivers/controldev" />
   <depend package="drivers/orogen/controldev" />
 </package>

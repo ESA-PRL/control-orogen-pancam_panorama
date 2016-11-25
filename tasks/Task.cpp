@@ -41,6 +41,9 @@ bool Task::configureHook()
     position_goal = position_order[position_index];
     frame_delay_um.microseconds = _frameDelayTimeMs.get() * 1000LL;
     
+    pan_target_set = false;
+    tilt_target_set = false;
+    
     return true;
 }
 
@@ -65,6 +68,13 @@ void Task::updateHook()
         {
             // Toggle the PanCam panorama mode with Y button
             enable = !enable;
+            
+            // Reset the target flags
+            if(!enable)
+            {
+                pan_target_set = false;
+                tilt_target_set = false;
+            }
         }
     }
     
@@ -74,7 +84,6 @@ void Task::updateHook()
         // Check if the pan and tilt angles has arrived to requested positions
         if(fabs(pan_angle_in - (*position_goal)) < position_error_margin && fabs(tilt_angle_in - tilt_angle) < position_error_margin)
         {
-            // TODO add timeout to avoid blurry pictures, try before and/or after reaching the goal position
             if(!save_frame)
             {
                 // The pan and tilt have reached their destination, now the cameras can take a picture set
@@ -92,6 +101,7 @@ void Task::updateHook()
                 
                 // Send signal to move to the next position to the PTU
                 _pan_angle_out.write(*position_goal);
+                // Target flags do not need to be reset as the command is sent out immediately
                 
                 // Reset flags
                 save_frame = false;
@@ -99,21 +109,21 @@ void Task::updateHook()
                 right_frame_saved = false;
             }
         }
-        else
+        else if(!pan_target_set)
         {
-            // Continously send the signal to the PTU until it reaches the position
-            // Without this the task will not properly start
             _pan_angle_out.write(*position_goal);
+            pan_target_set = true;
         }
     }
     
     if(_tilt_angle_in.read(tilt_angle_in) == RTT::NewData && enable)
     {
         // Got new data on the tilt position
-        if(fabs(tilt_angle_in - tilt_angle) > position_error_margin)
+        if(fabs(tilt_angle_in - tilt_angle) > position_error_margin && !tilt_target_set)
         {
-            // Continously send the signal to the PTU until it reaches the requested tilt position
+            // Send the signal to the PTU until it reaches the requested tilt position
             _tilt_angle_out.write(tilt_angle);
+            tilt_target_set = true;
         }
     }
     
@@ -121,13 +131,20 @@ void Task::updateHook()
     {
         if(left_frame->time > goal_arrival_time + frame_delay_um)
         {
+            // Save the timestamped PTU angles (this only needs to be done as images come in pairs)
+            ptu_timestamped_angles.time = left_frame->time;
+            ptu_timestamped_angles.angle_pan = pan_angle_in;
+            ptu_timestamped_angles.angle_tilt = tilt_angle_in;
+            _ptu_angles.write(ptu_timestamped_angles);
+            
             _left_frame_out.write(left_frame);
             left_frame_saved = true;
         }
     }
     
     if(_right_frame_in.read(right_frame) == RTT::NewData && enable && save_frame)
-    {        
+    {
+        // Frames always come in pairs, no frame synchronisation is required
         if(right_frame->time > goal_arrival_time + frame_delay_um)
         {
             _right_frame_out.write(right_frame);

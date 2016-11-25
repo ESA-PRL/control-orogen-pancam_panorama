@@ -51,12 +51,17 @@ namespace pancam_panorama
         double * position_order[4] = {&position_center, &position_left, &position_center, &position_right};
         // Pointer to a double to mark the next goal
         double * position_goal;
+        bool pan_target_set;
+        bool tilt_target_set;
         
         base::Time goal_arrival_time;
         RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> left_frame, right_frame;
         
         base::Time frame_delay_um;
         bool save_frame, left_frame_saved, right_frame_saved;
+        
+        // Structure for saving the timestamped pan and tilt angles for logging
+        TimestampedOrientationPTU ptu_timestamped_angles;
 
     public:
         Task(std::string const& name = "pancam_panorama::Task");
