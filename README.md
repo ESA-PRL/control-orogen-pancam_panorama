@@ -10,7 +10,7 @@ During the routine the PanCam loops trough the positions in the following way: c
 
 **Authors: Karl Kangur  
 Contact: Martin Azkarate  
-Affiliation: Automatipon and Robotics Laboratories, ESTEC, ESA**
+Affiliation: Automation and Robotics Laboratories, ESTEC, ESA**
 
 
 ## Installation
