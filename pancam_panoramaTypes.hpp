@@ -8,11 +8,12 @@ namespace pancam_panorama {
     struct TimestampedOrientationPTU
     {
         base::Time time;
-        // Angles are read direcrtly from the PTU, so unit conversion might be
-        // needed as PTU units might not correspond to actual angles in radians
-        // or degrees
+        // Angles are read direcrtly from the PTU as step values
         double angle_tilt;
         double angle_pan;
+        // Angles converted in degrees
+        double angle_tilt_degrees;
+        double angle_pan_degrees;
     };
 }
 

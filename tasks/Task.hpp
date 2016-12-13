@@ -45,6 +45,8 @@ namespace pancam_panorama
         double position_left;
         double position_center;
         double position_right;
+        double resolutionPerPosition;
+        double angleToStepsConstant;
         
         // Order in which the positions are traversed
         int position_index;

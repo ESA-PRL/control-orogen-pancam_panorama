@@ -7,14 +7,16 @@ import_types_from "base"
 task_context "Task" do
     needs_configuration
 
-    property("positionTilt", "double", 0.5).
-    	doc("PanCam tilt position for all positions")
-    property("positionLeft", "double", -0.5).
-    	doc("PanCam pan position left")
+    property("positionTilt", "double", 30).
+    	doc("PanCam tilt position for all positions in degrees")
+    property("positionLeft", "double", -30).
+    	doc("PanCam pan position left in degrees")
     property("positionCenter", "double", 0.0).
-    	doc("PanCam pan position center")
-    property("positionRight", "double", 0.5).
-    	doc("PanCam pan position right")
+    	doc("PanCam pan position center in degrees")
+    property("positionRight", "double", 30).
+    	doc("PanCam pan position right in degrees")
+    property("resolutionPerPosition", "double", 185.1429).
+    	doc("Axis resolution per position moved (in seconds/arc)")
     property("positionErrorMargin", "double", 0.01).
     	doc("PanCam pan and tilt position error margin")
     property("frameDelayTimeMs", "int", 100).
@@ -34,7 +36,7 @@ task_context "Task" do
 
     # Output ports
     output_port("pan_angle_out", "double").
-        doc("PTU angle command")
+        doc("PTU pan command")
     output_port("tilt_angle_out", "double").
         doc("PTU tilt command")
     output_port("left_frame_out", ro_ptr('base::samples::frame::Frame')).
@@ -44,6 +46,6 @@ task_context "Task" do
     output_port("ptu_angles", "/pancam_panorama/TimestampedOrientationPTU").
         doc("Timestamped PTU angles for logging")
 
-    port_driven
+    periodic 0.01
 end
 

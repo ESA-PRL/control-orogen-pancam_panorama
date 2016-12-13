@@ -33,10 +33,18 @@ bool Task::configureHook()
         return false;
     }
     
-    tilt_angle = _positionTilt.get();
-    position_left = _positionLeft.get();
-    position_center = _positionCenter.get();
-    position_right = _positionRight.get();
+    resolutionPerPosition = _resolutionPerPosition.get();
+    
+    // 185.1428 sec arc * .002778° = 0.051428
+    // To get 90 degrees: 90/0.051428 = 1750
+    angleToStepsConstant = 3.6f / resolutionPerPosition;
+    
+    // Transform angles (in degrees) to steps for the motor
+    position_left = _positionLeft.get() * angleToStepsConstant;
+    position_center = _positionCenter.get() * angleToStepsConstant;
+    position_right = _positionRight.get() * angleToStepsConstant;
+    tilt_angle = _positionTilt.get() * angleToStepsConstant;
+    
     position_error_margin = _positionErrorMargin.get();
     position_goal = position_order[position_index];
     frame_delay_um.microseconds = _frameDelayTimeMs.get() * 1000LL;
@@ -131,10 +139,12 @@ void Task::updateHook()
     {
         if(left_frame->time > goal_arrival_time + frame_delay_um)
         {
-            // Save the timestamped PTU angles (this only needs to be done as images come in pairs)
+            // Save the timestamped PTU angles (this only needs to be done here once as images come in pairs)
             ptu_timestamped_angles.time = left_frame->time;
             ptu_timestamped_angles.angle_pan = pan_angle_in;
             ptu_timestamped_angles.angle_tilt = tilt_angle_in;
+            ptu_timestamped_angles.angle_pan_degrees = pan_angle_in / angleToStepsConstant;
+            ptu_timestamped_angles.angle_tilt_degrees = tilt_angle_in / angleToStepsConstant;
             _ptu_angles.write(ptu_timestamped_angles);
             
             _left_frame_out.write(left_frame);
