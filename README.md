@@ -2,9 +2,11 @@
 
 ## Overview
 
-This package automatically takes pictures with the PanCam in 3 different positions. When the routine is enabled the module instructs the PanCam to a predefined position, waits until it reaches this position and saves the incoming stereo pictures, then in proceeds to the next position and loops over the 3 positions.
+This package automatically takes pictures with the PanCam in 3 different positions. When the routine is enabled the module instructs the PanCam to a predefined position, waits until it reaches this position and saves the next incoming image frames to make sure the images are not blurred because of the PTU movement. Then in proceeds to the next position and loops over the 3 positions.
 
 The pan positions are defined via the parameters. The positions are named left, center and right.
+
+For logging the package has a special structure that contains the timestamped left and right pictures with the PTU angles.
 
 During the routine the PanCam loops trough the positions in the following way: center, left, center, right.
 
@@ -77,29 +79,37 @@ Output of the left camera of the PTU.
 
 Output of the right camera of the PTU.
 
+* **`frame`** (/pancam_panorama/PanCamTimestampedFrame)
+
+Output of a structure containing both images as well as the PTU pan and tilt angles with a timestamp, useful for logging.
+
 #### Parameters
 
 * **`positionTilt`** (/double)
 
-PanCam tilt position for all positions. Arbitrary units.
+PanCam tilt position for all positions in degrees.
 
 * **`positionLeft`** (/double)
 
-PanCam pan position left. Arbitrary units.
+PanCam pan position left in degrees.
 
 * **`positionCenter`** (/double)
 
-PanCam pan position center. Arbitrary units.
+PanCam pan position center in degrees.
 
 * **`positionRight`** (/double)
 
-PanCam pan position right. Arbitrary units.
+PanCam pan position right in degrees.
 
 * **`positionErrorMargin`** (/double)
 
-PanCam pan position error margin. Arbitrary units.
+PanCam pan position error margin in degrees.
 
 * **`frameDelayTimeMs`** (/double)
 
 Minimum delay in milliseconds before saving a frame after the PanCam reaches its goal position.
+
+* **`resolutionPerPosition`** (/double)
+
+Axis resolution per position moved (in seconds/arc), used to transform degrees to motor steps, see the datasheet for the value.
 

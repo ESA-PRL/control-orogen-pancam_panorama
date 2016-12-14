@@ -44,8 +44,8 @@ bool Task::configureHook()
     position_center = _positionCenter.get() * angleToStepsConstant;
     position_right = _positionRight.get() * angleToStepsConstant;
     tilt_angle = _positionTilt.get() * angleToStepsConstant;
+    position_error_margin = _positionErrorMargin.get() * angleToStepsConstant;
     
-    position_error_margin = _positionErrorMargin.get();
     position_goal = position_order[position_index];
     frame_delay_um.microseconds = _frameDelayTimeMs.get() * 1000LL;
     
@@ -100,6 +100,14 @@ void Task::updateHook()
             }
             else if(left_frame_saved && right_frame_saved)
             {
+                // Save the timestamped frame with PTU angles
+                pancam_frame.time = left_frame->time;
+                pancam_frame.angle_pan_degrees = pan_angle_in / angleToStepsConstant;
+                pancam_frame.angle_tilt_degrees = tilt_angle_in / angleToStepsConstant;
+                pancam_frame.left_frame = *left_frame;
+                pancam_frame.right_frame = *right_frame;
+                _frame.write(pancam_frame);
+                
                 // Pictures have been taken, proceed to the next position
                 // Loop back to 0 instead of going to 4
                 position_index = (position_index + 1) % 4;
@@ -139,14 +147,6 @@ void Task::updateHook()
     {
         if(left_frame->time > goal_arrival_time + frame_delay_um)
         {
-            // Save the timestamped PTU angles (this only needs to be done here once as images come in pairs)
-            ptu_timestamped_angles.time = left_frame->time;
-            ptu_timestamped_angles.angle_pan = pan_angle_in;
-            ptu_timestamped_angles.angle_tilt = tilt_angle_in;
-            ptu_timestamped_angles.angle_pan_degrees = pan_angle_in / angleToStepsConstant;
-            ptu_timestamped_angles.angle_tilt_degrees = tilt_angle_in / angleToStepsConstant;
-            _ptu_angles.write(ptu_timestamped_angles);
-            
             _left_frame_out.write(left_frame);
             left_frame_saved = true;
         }
