@@ -29,9 +29,6 @@ namespace pancam_panorama
     protected:
         controldev::RawCommand joystick_command;
         
-        // Enable the automatic panorama capture (dynamic property)
-        bool enable;
-        
         // PTU pan and tilt angles from the PTU module (inputs for feedback)
         double pan_angle_in;
         double tilt_angle_in;

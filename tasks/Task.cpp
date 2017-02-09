@@ -4,7 +4,6 @@ using namespace pancam_panorama;
 
 Task::Task(std::string const& name):
     TaskBase(name),
-    enable(false),
     save_frame(false),
     left_frame_saved(false),
     right_frame_saved(false),
@@ -14,7 +13,6 @@ Task::Task(std::string const& name):
 
 Task::Task(std::string const& name, RTT::ExecutionEngine* engine):
     TaskBase(name, engine),
-    enable(false),
     save_frame(false),
     left_frame_saved(false),
     right_frame_saved(false),
@@ -49,9 +47,6 @@ bool Task::configureHook()
     position_goal = position_order[position_index];
     frame_delay_um.microseconds = _frameDelayTimeMs.get() * 1000LL;
     
-    pan_target_set = false;
-    tilt_target_set = false;
-    
     return true;
 }
 
@@ -61,6 +56,14 @@ bool Task::startHook()
     {
         return false;
     }
+    
+    pan_target_set = false;
+    tilt_target_set = false;
+    
+    // Reset PanCam position index so it would start from the beginning next time
+    position_index = 0;
+    position_goal = position_order[position_index];
+    
     return true;
 }
 
@@ -68,25 +71,7 @@ void Task::updateHook()
 {
     TaskBase::updateHook();
     
-    if(_raw_command.read(joystick_command) == RTT::NewData)
-    {
-        // Got joystick data
-        // The reading already sets the variable
-        if(joystick_command.buttonValue[Y])
-        {
-            // Toggle the PanCam panorama mode with Y button
-            enable = !enable;
-            
-            // Reset the target flags
-            if(!enable)
-            {
-                pan_target_set = false;
-                tilt_target_set = false;
-            }
-        }
-    }
-    
-    if(_pan_angle_in.read(pan_angle_in) == RTT::NewData && enable)
+    if(_pan_angle_in.read(pan_angle_in) == RTT::NewData)
     {
         // Got new data on the pan position
         // Check if the pan and tilt angles has arrived to requested positions
@@ -132,7 +117,7 @@ void Task::updateHook()
         }
     }
     
-    if(_tilt_angle_in.read(tilt_angle_in) == RTT::NewData && enable)
+    if(_tilt_angle_in.read(tilt_angle_in) == RTT::NewData)
     {
         // Got new data on the tilt position
         if(fabs(tilt_angle_in - tilt_angle) > position_error_margin && !tilt_target_set)
@@ -143,7 +128,7 @@ void Task::updateHook()
         }
     }
     
-    if(_left_frame_in.read(left_frame) == RTT::NewData && enable && save_frame)
+    if(_left_frame_in.read(left_frame) == RTT::NewData && save_frame)
     {
         if(left_frame->time > goal_arrival_time + frame_delay_um)
         {
@@ -152,7 +137,7 @@ void Task::updateHook()
         }
     }
     
-    if(_right_frame_in.read(right_frame) == RTT::NewData && enable && save_frame)
+    if(_right_frame_in.read(right_frame) == RTT::NewData && save_frame)
     {
         // Frames always come in pairs, no frame synchronisation is required
         if(right_frame->time > goal_arrival_time + frame_delay_um)
@@ -171,9 +156,6 @@ void Task::errorHook()
 void Task::stopHook()
 {
     TaskBase::stopHook();
-    
-    // Reset PanCam position index so it would start from the beginning next time
-    position_index = 0;
 }
 
 void Task::cleanupHook()
