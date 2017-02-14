@@ -34,7 +34,8 @@ namespace pancam_panorama
         double tilt_angle_in;
         
         // Position error margin for the pan and tilt positions
-        double position_error_margin;
+        double position_error_margin_pan;
+        double position_error_margin_tilt;
         
         // Tilt angle at which the PanCam should be when taking pictures
         double tilt_angle;
@@ -42,8 +43,8 @@ namespace pancam_panorama
         double position_left;
         double position_center;
         double position_right;
-        double resolutionPerPosition;
-        double angleToStepsConstant;
+        double panResolution;
+        double tiltResolution;
         
         // Order in which the positions are traversed
         int position_index;

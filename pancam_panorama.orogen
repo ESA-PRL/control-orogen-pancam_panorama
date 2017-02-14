@@ -14,8 +14,10 @@ task_context "Task" do
     	doc("PanCam pan position center in degrees")
     property("positionRight", "double", 30).
     	doc("PanCam pan position right in degrees")
-    property("resolutionPerPosition", "double", 185.1429).
-    	doc("Axis resolution per position moved (in seconds/arc)")
+    property("panResolution", "double", 0.051429).
+    	doc("Pan axis resolution (deg/pos)")
+    property("tiltResolution", "double", 0.012857).
+    	doc("Tilt axis resolution (deg/pos)")
     property("positionErrorMargin", "double", 0.1).
     	doc("PanCam pan and tilt position error margin")
     property("frameDelayTimeMs", "int", 100).
