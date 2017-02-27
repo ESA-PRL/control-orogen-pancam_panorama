@@ -79,9 +79,13 @@ Output of the left camera of the PTU.
 
 Output of the right camera of the PTU.
 
-* **`frame`** (/pancam_panorama/PanCamTimestampedFrame)
+* **`pan_angle_out_degrees`** (/double)
 
-Output of a structure containing both images as well as the PTU pan and tilt angles with a timestamp, useful for logging.
+PTU pan angle in degrees.
+
+* **`tilt_angle_out_degrees`** (/double)
+
+PTU tilt angle in degrees.
 
 #### Parameters
 

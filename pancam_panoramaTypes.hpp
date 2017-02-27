@@ -6,7 +6,7 @@
 
 namespace pancam_panorama {
     // Timestamped frame with angles and both images
-    struct PanCamTimestampedFrame
+    /*struct PanCamTimestampedFrame
     {
         // Time at which the frame was taken
         base::Time time;
@@ -18,7 +18,7 @@ namespace pancam_panorama {
         // Image frames
         base::samples::frame::Frame left_frame;
         base::samples::frame::Frame right_frame;
-    };
+    };*/
 }
 
 #endif

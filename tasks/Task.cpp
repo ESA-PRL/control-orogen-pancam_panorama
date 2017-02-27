@@ -89,12 +89,17 @@ void Task::updateHook()
             else if(left_frame_saved && right_frame_saved)
             {
                 // Save the timestamped frame with PTU angles
-                pancam_frame.time = left_frame->time;
+                /*pancam_frame.time = left_frame->time;
                 pancam_frame.angle_pan_degrees = pan_angle_in * panResolution;
                 pancam_frame.angle_tilt_degrees = tilt_angle_in * tiltResolution;
                 pancam_frame.left_frame = *left_frame;
                 pancam_frame.right_frame = *right_frame;
-                _frame.write(pancam_frame);
+                _frame.write(pancam_frame);*/
+                
+                _left_frame_out.write(left_frame);
+                _right_frame_out.write(right_frame);
+                _pan_angle_out_degrees.write(pan_angle_in * panResolution);
+                _tilt_angle_out_degrees.write(tilt_angle_in * tiltResolution);
                 
                 // Pictures have been taken, proceed to the next position
                 // Loop back to 0 instead of going to 4
@@ -135,7 +140,6 @@ void Task::updateHook()
     {
         if(left_frame->time > goal_arrival_time + frame_delay_um)
         {
-            _left_frame_out.write(left_frame);
             left_frame_saved = true;
         }
     }
@@ -145,7 +149,6 @@ void Task::updateHook()
         // Frames always come in pairs, no frame synchronisation is required
         if(right_frame->time > goal_arrival_time + frame_delay_um)
         {
-            _right_frame_out.write(right_frame);
             right_frame_saved = true;
         }
     }
