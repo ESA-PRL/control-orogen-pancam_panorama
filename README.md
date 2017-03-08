@@ -2,13 +2,9 @@
 
 ## Overview
 
-This package automatically takes pictures with the PanCam in 3 different positions. When the routine is enabled the module instructs the PanCam to a predefined position, waits until it reaches this position and saves the next incoming image frames to make sure the images are not blurred because of the PTU movement. Then in proceeds to the next position and loops over the 3 positions.
+This package automatically takes pictures with the PanCam in different positions. When the routine is enabled the module instructs the PanCam to a predefined position, waits until it reaches this position and saves the next incoming image frames to make sure the images are not blurred because of the PTU movement.
 
-The pan positions are defined via the parameters. The positions are named left, center and right.
-
-For logging the package has a special structure that contains the timestamped left and right pictures with the PTU angles.
-
-During the routine the PanCam loops trough the positions in the following way: center, left, center, right.
+The number of pan/tilt positions is arbitrary and defined via the parameters.
 
 **Authors: Karl Kangur  
 Contact: Martin Azkarate  
@@ -19,14 +15,11 @@ Affiliation: Automation and Robotics Laboratories, ESTEC, ESA**
 
 ### Dependencies
 
-This package depends on the following packages:
-
-* [drivers/controldev](https://github.com/rock-drivers/drivers-controldev)
-* [drivers/orogen/controldev](https://github.com/rock-drivers/drivers-orogen-controldev)
+This package does not depend on any other packages.
 
 ### Building
 
-In order to install, clone the latest version from this repository into your workspace under `control/orogen/motion_translator`, add the following line to `autoproj/manifest` under `layout:`
+In order to install, clone the latest version from this repository into your workspace under `control/orogen/pancam_panorama`, add the following line to `autoproj/manifest` under `layout:`
 
     - control/orogen/pancam_panorama
 
@@ -40,10 +33,6 @@ Execute the following to build the package:
 ### motion_translator
 
 #### Inputs
-
-* **`raw_command`** (/controldev/RawCommand)
-
-Raw messages coming from a joystick or gamepad, used to toggle the panorama mode.
 
 * **`pan_angle_in`** (/double)
 
@@ -89,21 +78,25 @@ PTU tilt angle in degrees.
 
 #### Parameters
 
-* **`positionTilt`** (/double)
+* **`cameraPositions`** (/std/vector\</base/Vector2d\>)
 
-PanCam tilt position for all positions in degrees.
+Camera pan/tilt orientations for pictures, in degrees.
 
-* **`positionLeft`** (/double)
+In the `.yml` configuration file this parameter looks like the following:
 
-PanCam pan position left in degrees.
-
-* **`positionCenter`** (/double)
-
-PanCam pan position center in degrees.
-
-* **`positionRight`** (/double)
-
-PanCam pan position right in degrees.
+    cameraPositions:
+      - data:
+        - -30.0
+        - 20.0
+      - data:
+        - 0.0
+        - 20.0
+      - data:
+        - 30.0
+        - 20.0
+      - data:
+        - 0.0
+        - 20.0
 
 * **`positionErrorMargin`** (/double)
 
@@ -112,8 +105,4 @@ PanCam pan position error margin in degrees.
 * **`frameDelayTimeMs`** (/double)
 
 Minimum delay in milliseconds before saving a frame after the PanCam reaches its goal position.
-
-* **`resolutionPerPosition`** (/double)
-
-Axis resolution per position moved (in seconds/arc), used to transform degrees to motor steps, see the datasheet for the value.
 
