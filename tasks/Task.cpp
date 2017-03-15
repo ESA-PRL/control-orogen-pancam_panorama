@@ -92,7 +92,7 @@ void Task::updateHook()
                 _left_frame_out.write(left_frame);
                 _right_frame_out.write(right_frame);
                 _pan_angle_out_degrees.write(pan_angle_in / DEG2RAD);
-                _tilt_angle_out_degrees.write(tilt_angle_temp / DEG2RAD);
+                _tilt_angle_out_degrees.write(tilt_angle_temp / DEG2RAD * TILT_MULTIPLIER);
                 
                 // Reset flags
                 save_frame = false;
@@ -104,7 +104,7 @@ void Task::updateHook()
                 
                 // Send signal to move to the next position to the PTU
                 _pan_angle_out.write(camera_positions[position_index][PAN] * DEG2RAD);
-                _tilt_angle_out.write(camera_positions[position_index][TILT] * DEG2RAD);
+                _tilt_angle_out.write(camera_positions[position_index][TILT] * DEG2RAD * TILT_MULTIPLIER);
             }
         }
         else
