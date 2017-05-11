@@ -71,7 +71,15 @@ bool Task::startHook()
 void Task::updateHook()
 {
     TaskBase::updateHook();
-    
+
+    bool execute;
+    if(_execution_valid.connected())
+    {
+	_execution_valid.read(execute); // do not acquire nor move
+	if(!execute)
+		return;
+    }
+
     if(_pan_angle_in.read(pan_angle_in) == RTT::NewData)
     {
         // Get the current pan and tilt goal positions
