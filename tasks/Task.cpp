@@ -72,13 +72,16 @@ void Task::updateHook()
 {
     TaskBase::updateHook();
 
+    // ------------ This part of the code allows this component to be managed by another ---------
+    static bool first_exec = true;
     bool execute;
-    if(_execution_valid.connected())
+    if(_execution_valid.connected() && !first_exec)
     {
 	_execution_valid.read(execute); // do not acquire nor move
 	if(!execute)
 		return;
     }
+    // --------------------------------------------------------------------------------------------
 
     if(_pan_angle_in.read(pan_angle_in) == RTT::NewData)
     {
@@ -101,6 +104,8 @@ void Task::updateHook()
                 _right_frame_out.write(right_frame);
                 _pan_angle_out_degrees.write(pan_angle_in / DEG2RAD);
                 _tilt_angle_out_degrees.write(tilt_angle_temp / DEG2RAD * TILT_MULTIPLIER);
+
+		first_exec = false;
                 
                 // Reset flags
                 save_frame = false;
