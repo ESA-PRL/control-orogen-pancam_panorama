@@ -2,7 +2,7 @@
 #define PANCAM_PANORAMA_TASK_TASK_HPP
 
 #include "pancam_panorama/TaskBase.hpp"
-#include "controldev/JoystickTaskBase.hpp"
+//#include "controldev/JoystickTaskBase.hpp"
 
 namespace pancam_panorama
 {
